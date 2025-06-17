@@ -39,3 +39,44 @@ class LoteSerializer(serializers.ModelSerializer):
             from datetime import date
             return obj.fecha_vencimiento < date.today()
         return False
+
+class CategoriaSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Categoria
+        fields = '__all__'
+
+class EtiquetaSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Etiqueta
+        fields = '__all__'
+        
+class HistorialPrecioSerializer(serializers.ModelSerializer):
+    item_nombre = serializers.ReadOnlyField(source='item.nombre')
+    
+    class Meta:
+        model = HistorialPrecio
+        fields = '__all__'
+        
+class KitComponenteSerializer(serializers.ModelSerializer):
+    item_nombre = serializers.ReadOnlyField(source='item.nombre')
+    item_numero_serie = serializers.ReadOnlyField(source='item.numero_serie')
+
+    class Meta:
+        model = KitComponente
+        fields = ['id', 'item', 'item_nombre', 'item_numero_serie', 'cantidad_requerida']
+
+class KitSerializer(serializers.ModelSerializer):
+    # Para ver los IDs de los kits componentes anidados
+    componentes_kits = serializers.PrimaryKeyRelatedField(many=True, queryset=Kit.objects.all(), required=False)
+    # Para ver los detalles de los ítems componentes
+    componentes_items_details = KitComponenteSerializer(source='kitcomponente_set', many=True, read_only=True)
+
+    class Meta:
+        model = Kit
+        fields = '__all__'
+        
+class ProveedorSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Proveedor
+        fiels = '__all__'
+        

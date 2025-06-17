@@ -40,7 +40,16 @@ INSTALLED_APPS = [
     'tasks',
     'rest_framework',
     'corsheaders',
+    'django_filters',
 ]
+
+REST_FRAMEWORK = {
+    'DEFAULT_FILTER_BACKENDS': [
+        'django_filters.rest_framework.DjangoFilterBackend',
+        'rest_framework.filters.SearchFilter', # Para búsqueda
+        'rest_framework.filters.OrderingFilter', # Para ordenamiento
+    ]
+}
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',

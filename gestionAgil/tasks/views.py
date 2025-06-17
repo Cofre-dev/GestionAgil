@@ -1,13 +1,19 @@
 from django.shortcuts import render
 # tasks/views.py
-from rest_framework import generics
+from rest_framework import generics, filters
+from django_filters.rest_framework import DjangoFilterBackend # ¡Importa esto!                                                                                                                                                                
 from .models import *
 from .serializers import *
+from .filters import ItemInventarioFilter 
 
 class ItemInventarioListCreateView(generics.ListCreateAPIView):
-    # Esta vista permite listar todos los ItemInventario (GET) y crear uno nuevo (POST)
     queryset = ItemInventario.objects.all()
     serializer_class = ItemInventarioSerializer
+    # Nuevas configuraciones para filtrado y búsqueda
+    filter_backends = [DjangoFilterBackend, filters.SearchFilter, filters.OrderingFilter]
+    filterset_fields = ['ubicacion', 'stock_bajo', 'categorias', 'etiquetas'] # Campos por los que se puede filtrar
+    search_fields = ['nombre', 'descripcion', 'numero_serie'] # Campos por los que se puede buscar texto
+    ordering_fields = ['nombre', 'cantidad', 'fecha_registro'] # Campos por los que se puede ordenar    
 
 class ItemInventarioRetrieveUpdateDestroyView(generics.RetrieveUpdateDestroyAPIView):
     # Esta vista permite recuperar, actualizar y eliminar un ItemInventario específico
@@ -37,20 +43,17 @@ class MovimientoInventarioRetrieveUpdateDestroyView(generics.RetrieveUpdateDestr
     serializer_class = MovimientoInventarioSerializer
     lookup_field = 'pk'
 
-    # Opcional: para actualizar la cantidad del ItemInventario cuando se actualiza o elimina un movimiento
     def perform_update(self, serializer):
-        old_movimiento = self.get_object() # Obtiene el objeto antes de la actualización
-        new_movimiento = serializer.save() # Guarda el nuevo objeto
+        old_movimiento = self.get_object() 
+        new_movimiento = serializer.save() 
 
         item = new_movimiento.item
 
-        # Revertir el cambio anterior
         if old_movimiento.tipo_movimiento == 'entrada':
             item.cantidad -= old_movimiento.cantidad_cambio
         elif old_movimiento.tipo_movimiento == 'salida':
             item.cantidad += old_movimiento.cantidad_cambio
 
-        # Aplicar el nuevo cambio
         if new_movimiento.tipo_movimiento == 'entrada':
             item.cantidad += new_movimiento.cantidad_cambio
         elif new_movimiento.tipo_movimiento == 'salida':
@@ -67,8 +70,7 @@ class MovimientoInventarioRetrieveUpdateDestroyView(generics.RetrieveUpdateDestr
             item.cantidad += instance.cantidad_cambio
         item.save()
         instance.delete()
-        
-# Nuevas vistas para Lotes
+
 class LoteListCreateView(generics.ListCreateAPIView):
     queryset = Lote.objects.all()
     serializer_class = LoteSerializer
@@ -77,3 +79,65 @@ class LoteRetrieveUpdateDestroyView(generics.RetrieveUpdateDestroyAPIView):
     queryset = Lote.objects.all()
     serializer_class = LoteSerializer
     lookup_field = 'pk'
+
+class CategoriaListCreateView(generics.ListCreateAPIView):
+    queryset = Categoria.objects.all()
+    serializer_class = CategoriaSerializer
+
+class CategoriaRetrieveUpdateDestroyView(generics.RetrieveUpdateDestroyAPIView):
+    queryset = Categoria.objects.all()
+    serializer_class = CategoriaSerializer
+    lookup_field = 'pk'
+
+class EtiquetaListCreateView(generics.ListCreateAPIView):
+    queryset = Etiqueta.objects.all()
+    serializer_class = EtiquetaSerializer
+
+class EtiquetaRetrieveUpdateDestroyView(generics.RetrieveUpdateDestroyAPIView):
+    queryset = Etiqueta.objects.all()
+    serializer_class = EtiquetaSerializer
+    lookup_field = 'pk'
+
+class HistorialPrecioListCreateView(generics.ListCreateAPIView):
+    queryset = HistorialPrecio.objects.all()
+    serializer_class = HistorialPrecioSerializer
+
+class HistorialPrecioRetrieveUpdateDestroyView(generics.RetrieveUpdateDestroyAPIView):
+    queryset = HistorialPrecio.objects.all()
+    serializer_class = HistorialPrecioSerializer
+    lookup_field = 'pk'
+
+class KitListCreateView(generics.ListCreateAPIView):
+    queryset = Kit.objects.all()
+    serializer_class = KitSerializer
+
+class KitRetrieveUpdateDestroyView(generics.RetrieveUpdateDestroyAPIView):
+    queryset = Kit.objects.all()
+    serializer_class = KitSerializer
+    lookup_field = 'pk'
+
+class KitComponenteListCreateView(generics.ListCreateAPIView):
+    queryset = KitComponente.objects.all()
+    serializer_class = KitComponenteSerializer
+
+class KitComponenteRetrieveUpdateDestroyView(generics.RetrieveUpdateDestroyAPIView):
+    queryset = KitComponente.objects.all()
+    serializer_class = KitComponenteSerializer
+    lookup_field = 'pk'
+
+class ProveedorListCreateView(generics.ListCreateAPIView):
+    queryset = Proveedor.objects.all()
+    serializer_class = ProveedorSerializer
+
+class ProveedorRetrieveUpdateDestroyView(generics.RetrieveUpdateDestroyAPIView):
+    queryset = Proveedor.objects.all()
+    serializer_class = ProveedorSerializer
+    lookup_field = 'pk'
+    
+class ItemInventarioListCreateView(generics.ListCreateAPIView):
+    queryset = ItemInventario.objects.all()
+    serializer_class = ItemInventarioSerializer
+    filter_backends = [DjangoFilterBackend, filters.SearchFilter, filters.OrderingFilter]
+    filterset_class = ItemInventarioFilter # <-- ¡Cambia esto de filterset_fields a filterset_class!
+    search_fields = ['nombre', 'descripcion', 'numero_serie']
+    ordering_fields = ['nombre', 'cantidad', 'fecha_registro']

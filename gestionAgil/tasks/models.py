@@ -88,3 +88,63 @@ class Etiqueta(models.Model):
     class Meta:
         verbose_name = "Etiqueta"
         verbose_name_plural = "Etiquetas"
+        
+class HistorialPrecio(models.Model):
+    item = models.ForeignKey(ItemInventario, on_delete=models.CASCADE, related_name='historial_precios')
+    precio_compra = models.DecimalField(max_digits=10, decimal_places=2)
+    fecha_registro = models.DateField(auto_now_add=True)
+
+    def __str__(self):
+        return f"Precio de {self.item.nombre}: {self.precio_compra} el {self.fecha_registro}"
+
+    class Meta:
+        verbose_name = "Historial de Precio"
+        verbose_name_plural = "Historial de Precios"
+        ordering = ['-fecha_registro']
+        
+class Kit(models.Model):
+    # RF8: Gestión de Kits y Conjuntos
+    nombre = models.CharField(max_length=200, unique=True)
+    descripcion = models.TextField(blank=True, null=True)
+    # Un kit puede estar compuesto de otros kits (relación recursiva)
+    componentes_kits = models.ManyToManyField('self', symmetrical=False, blank=True, related_name='parent_kits')
+    # Un kit también puede estar compuesto de ítems de inventario individuales
+    componentes_items = models.ManyToManyField(ItemInventario, through='KitComponente', related_name='kits')
+
+    def __str__(self):
+        return self.nombre
+
+    class Meta:
+        verbose_name = "Kit"
+        verbose_name_plural = "Kits"
+
+# Modelo intermedio para la relación Many-to-Many con atributos adicionales (cantidad)
+class KitComponente(models.Model):
+    kit = models.ForeignKey(Kit, on_delete=models.CASCADE)
+    item = models.ForeignKey(ItemInventario, on_delete=models.CASCADE)
+    cantidad_requerida = models.IntegerField(default=1)
+
+    def __str__(self):
+        return f"{self.cantidad_requerida}x {self.item.nombre} en {self.kit.nombre}"
+
+    class Meta:
+        unique_together = ('kit', 'item') # Un ítem solo puede aparecer una vez por kit como componente
+        verbose_name = "Componente de Kit"
+        verbose_name_plural = "Componentes de Kits"
+    
+class Proveedor(models.Model):
+    # RF10: Gestión de Proveedores
+    nombre = models.CharField(max_length=200, unique=True)
+    contacto_principal = models.CharField(max_length=100, blank=True, null=True)
+    telefono = models.CharField(max_length=20, blank=True, null=True)
+    email = models.EmailField(blank=True, null=True)
+    direccion = models.TextField(blank=True, null=True)
+    terminos_pago = models.CharField(max_length=100, blank=True, null=True)
+    fecha_registro = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return self.nombre
+
+    class Meta:
+        verbose_name = "Proveedor"
+        verbose_name_plural = "Proveedores"
