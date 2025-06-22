@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Inventario Maestranzas Unidos S.A.</title>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+</head>
+<body>
+    <div class="container">
+        <h1>Inventario de Maestranzas Unidos S.A.</h1>
+
+        <section class="login-section">
+            <h2>Iniciar Sesión</h2>
+            <form id="login-form" class="login-form">
+                <label for="username">Usuario:</label>
+                <input type="text" id="username" name="username" required>
+                <label for="password">Contraseña:</label>
+                <input type="password" id="password" name="password" required>
+                <button type="submit">Login</button>
+                <div id="auth-status" class="auth-status"></div>
+            </form>
+        </section>
+
+        {% comment %} <section class="item-list-section">
+            <h2>Lista de Ítems</h2>
+            <div id="items-container" class="item-grid">
+                <p class="message loading-message">Cargando ítems...</p>
+            </div>
+        </section> {% endcomment %}
+
+        {% comment %} <section class="form-section">
+            <h2>Añadir Nuevo Ítem</h2>
+            <form id="add-item-form">
+                <label for="item-nombre">Nombre:</label>
+                <input type="text" id="item-nombre" placeholder="Nombre del ítem" required>
+
+                <label for="item-descripcion">Descripción:</label>
+                <textarea id="item-descripcion" placeholder="Descripción del ítem"></textarea>
+
+                <label for="item-numero_serie">Número de Serie:</label>
+                <input type="text" id="item-numero_serie" placeholder="Número de serie (opcional)">
+
+                <label for="item-cantidad">Cantidad:</label>
+                <input type="number" id="item-cantidad" placeholder="Cantidad" required min="0">
+
+                <label for="item-ubicacion">Ubicación:</label>
+                <input type="text" id="item-ubicacion" placeholder="Ej: Almacén A1, Estante B2">
+
+                <label for="item-umbral_minimo">Umbral Mínimo:</label>
+                <input type="number" id="item-umbral_minimo" placeholder="Cantidad mínima para alerta" required min="0">
+
+                <button type="submit">Añadir Ítem</button>
+                <div id="add-item-status" class="message"></div>
+            </form>
+        </section> {% endcomment %}
+
+    </div>
+
+    {# Cargar el script JS al final del body para asegurar que el DOM esté cargado #}
+    <script src="{% static 'js/script.js' %}"></script>
+</body>
+</html>

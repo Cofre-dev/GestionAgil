@@ -5,19 +5,19 @@ from django.db import models
 from django.db import models
 
 class ItemInventario(models.Model):
-    # RF1: Registro de Inventario
     nombre = models.CharField(max_length=200)
     descripcion = models.TextField(blank=True, null=True)
     numero_serie = models.CharField(max_length=100, unique=True, blank=True, null=True)
     ubicacion = models.CharField(max_length=100, blank=True, null=True)
     cantidad = models.IntegerField(default=0)
-    umbral_minimo = models.IntegerField(default=5) # Para RF3: Alertas de Stock Bajo
+    umbral_minimo = models.IntegerField(default=5)
     fecha_registro = models.DateTimeField(auto_now_add=True)
     fecha_actualizacion = models.DateTimeField(auto_now=True)
     
     categorias = models.ManyToManyField('Categoria', blank=True, related_name='items')
     etiquetas = models.ManyToManyField('Etiqueta', blank=True, related_name='items')
 
+    
     def __str__(self):
         return f"{self.nombre} ({self.numero_serie or 'N/A'})"
 
@@ -128,7 +128,7 @@ class KitComponente(models.Model):
         return f"{self.cantidad_requerida}x {self.item.nombre} en {self.kit.nombre}"
 
     class Meta:
-        unique_together = ('kit', 'item') # Un ítem solo puede aparecer una vez por kit como componente
+        unique_together = ('kit', 'item') 
         verbose_name = "Componente de Kit"
         verbose_name_plural = "Componentes de Kits"
     

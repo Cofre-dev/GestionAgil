@@ -8,7 +8,7 @@ class ItemInventarioSerializer(serializers.ModelSerializer):
     
     class Meta:
         model = ItemInventario
-        fields = '__all__' # Incluye todos los campos del modelo
+        fields = '__all__' 
         
     def get_stock_bajo(self,obj):
         return obj.cantidad < obj.umbral_minimo
@@ -21,8 +21,6 @@ class MovimientoInventarioSerializer(serializers.ModelSerializer):
     class Meta:
         model = MovimientoInventario
         fields = '__all__'
-        # O puedes especificar los campos que quieres incluir en la API
-        # fields = ['id', 'item', 'item_nombre', 'item_numero_serie', 'tipo_movimiento', 'cantidad_cambio', 'fecha_movimiento', 'razon']
 
 class LoteSerializer(serializers.ModelSerializer):
     item_nombre = serializers.ReadOnlyField(source='item.nombre')
@@ -66,9 +64,7 @@ class KitComponenteSerializer(serializers.ModelSerializer):
         fields = ['id', 'item', 'item_nombre', 'item_numero_serie', 'cantidad_requerida']
 
 class KitSerializer(serializers.ModelSerializer):
-    # Para ver los IDs de los kits componentes anidados
     componentes_kits = serializers.PrimaryKeyRelatedField(many=True, queryset=Kit.objects.all(), required=False)
-    # Para ver los detalles de los ítems componentes
     componentes_items_details = KitComponenteSerializer(source='kitcomponente_set', many=True, read_only=True)
 
     class Meta:
@@ -78,5 +74,5 @@ class KitSerializer(serializers.ModelSerializer):
 class ProveedorSerializer(serializers.ModelSerializer):
     class Meta:
         model = Proveedor
-        fiels = '__all__'
-        
+        fields = '__all__'
+    

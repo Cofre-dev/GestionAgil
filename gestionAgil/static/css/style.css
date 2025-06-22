@@ -1,0 +1,159 @@
+/* gestionAgil/static/css/style.css */
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 20px;
+    background-color: #f4f4f4;
+    color: #333;
+}
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+h1, h2 {
+    color: #2c3e50;
+    text-align: center;
+    margin-bottom: 20px;
+}
+.item-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 20px;
+}
+.item-card {
+    background-color: #f9f9f9;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    padding: 15px;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+    transition: transform 0.2s ease-in-out;
+}
+.item-card:hover {
+    transform: translateY(-5px);
+}
+.item-card h3 {
+    color: #3498db;
+    margin-top: 0;
+    margin-bottom: 10px;
+    font-size: 1.2em;
+}
+.item-card p {
+    margin-bottom: 5px;
+    font-size: 0.9em;
+    line-height: 1.4;
+}
+.item-card strong {
+    color: #555;
+}
+.stock-bajo {
+    color: #e74c3c;
+    font-weight: bold;
+}
+.stock-ok {
+    color: #27ae60;
+}
+.message {
+    text-align: center;
+    padding: 15px;
+    margin-top: 20px;
+    border-radius: 5px;
+}
+.loading-message {
+    background-color: #e0f7fa;
+    color: #00796b;
+}
+.error-message {
+    background-color: #ffebee;
+    color: #c62828;
+}
+
+/* Estilos para el formulario de login */
+.login-section {
+    background-color: #ecf0f1;
+    padding: 20px;
+    border-radius: 8px;
+    margin-bottom: 30px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    text-align: center;
+}
+.login-section h2 {
+    margin-top: 0;
+    margin-bottom: 15px;
+}
+.login-form label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: bold;
+    text-align: left;
+}
+.login-form input[type="text"],
+.login-form input[type="password"] {
+    width: calc(100% - 20px);
+    padding: 10px;
+    margin-bottom: 15px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box; /* Incluye padding y borde en el ancho total */
+}
+.login-form button {
+    background-color: #3498db;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 1em;
+    transition: background-color 0.3s ease;
+}
+.login-form button:hover {
+    background-color: #2980b9;
+}
+.auth-status {
+    margin-top: 15px;
+    font-size: 0.9em;
+    color: #555;
+}
+.auth-status strong {
+    color: #27ae60;
+}
+.logout-button {
+    background-color: #e74c3c;
+    margin-left: 10px;
+}
+.logout-button:hover {
+    background-color: #c0392b;
+}
+.form-section {
+    background-color: #ecf0f1;
+    padding: 20px;
+    border-radius: 8px;
+    margin-top: 30px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+.form-section input[type="text"],
+.form-section input[type="number"],
+.form-section textarea {
+    width: calc(100% - 20px);
+    padding: 10px;
+    margin-bottom: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+}
+.form-section button {
+    background-color: #28a745;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 1em;
+    transition: background-color 0.3s ease;
+}
+.form-section button:hover {
+    background-color: #218838;
+}
