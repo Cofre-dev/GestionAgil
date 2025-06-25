@@ -1,15 +1,18 @@
 
+# gestionAgil/gestionAgil/urls.py
 from django.contrib import admin
 from django.urls import path, include, re_path
-from django.views.generic import *
-from django.conf import settings
-from django.conf.urls.static import static
-
-#Importaciones para drf-yasg
 from rest_framework.authtoken import views as authtoken_views
+
+# Importaciones para drf-yasg
 from rest_framework import permissions
 from drf_yasg.views import get_schema_view
 from drf_yasg import openapi
+
+# Para servir archivos HTML (templates)
+from django.views.generic import TemplateView # <--- Importa esto
+from django.conf import settings # <--- Importa settings
+from django.conf.urls.static import static # <--- Importa esto para staticfiles en desarrollo
 
 # Define el esquema de la API
 schema_view = get_schema_view(
@@ -26,15 +29,14 @@ schema_view = get_schema_view(
 )
 
 urlpatterns = [
-    path('admin/', admin.site.urls),
+   path('admin/', admin.site.urls),
+    path('api-token-auth/', authtoken_views.obtain_auth_token), 
     path('api/', include('tasks.urls')),
-    path('api-token-auth', authtoken_views.obtain_auth_token),
     
     re_path(r'^swagger(?P<format>\.json|\.yaml)$', schema_view.without_ui(cache_timeout=0), name='schema-json'),
     re_path(r'^swagger/$', schema_view.with_ui('swagger', cache_timeout=0), name='schema-swagger-ui'),
     re_path(r'^redoc/$', schema_view.with_ui('redoc', cache_timeout=0), name='schema-redoc'),
     
-    # Ruta para tu archivo HTML simple
-    path('', TemplateView.as_view(template_name='index.html'), name='home'), # <--- ¡Añade esta línea!
+    path('', TemplateView.as_view(template_name='index.html'), name='home'), 
 ]
 
