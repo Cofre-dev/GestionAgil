@@ -3,9 +3,6 @@ import django_filters
 from .models import ItemInventario, Lote, MovimientoInventario # Importa los modelos que vas a filtrar
 
 class ItemInventarioFilter(django_filters.FilterSet):
-    # Filtro para 'stock_bajo'
-    # Puedes definirlo como BooleanFilter si quieres 'true'/'false'
-    # O un NumberFilter si quieres filtrar por cantidad < X
     stock_bajo = django_filters.BooleanFilter(field_name='cantidad', lookup_expr='lt', method='filter_stock_bajo')
 
     # Filtro por rango de fechas de registro
@@ -18,6 +15,7 @@ class ItemInventarioFilter(django_filters.FilterSet):
         field_name='categorias__id',
         to_field_name='id',
     )
+    
     etiquetas = django_filters.ModelMultipleChoiceFilter(
         queryset=ItemInventario.etiquetas.through.objects.all().values_list('etiqueta_id', flat=True).distinct(),
         field_name='etiquetas__id',

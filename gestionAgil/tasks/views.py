@@ -10,12 +10,12 @@ from .filters import ItemInventarioFilter
 class ItemInventarioListCreateView(generics.ListCreateAPIView):
     queryset = ItemInventario.objects.all()
     serializer_class = ItemInventarioSerializer
+    filterset_class = ItemInventarioFilter
     filter_backends = [DjangoFilterBackend, filters.SearchFilter, filters.OrderingFilter]
-    filterset_fields = ['ubicacion', 'stock_bajo', 'categorias', 'etiquetas'] 
     search_fields = ['nombre', 'descripcion', 'numero_serie']
     ordering_fields = ['nombre', 'cantidad', 'fecha_registro']
     permission_classes = [permissions.IsAuthenticatedOrReadOnly]
-
+       
 class ItemInventarioRetrieveUpdateDestroyView(generics.RetrieveUpdateDestroyAPIView):
     queryset = ItemInventario.objects.all()
     serializer_class = ItemInventarioSerializer
@@ -148,12 +148,5 @@ class ProveedorRetrieveUpdateDestroyView(generics.RetrieveUpdateDestroyAPIView):
     lookup_field = 'pk'
     permission_classes = [permissions.IsAuthenticatedOrReadOnly]
     
-class ItemInventarioListCreateView(generics.ListCreateAPIView):
-    queryset = ItemInventario.objects.all()
-    serializer_class = ItemInventarioSerializer
-    filter_backends = [DjangoFilterBackend, filters.SearchFilter, filters.OrderingFilter]
-    filterset_class = ItemInventarioFilter, 
-    search_fields = ['nombre', 'descripcion', 'numero_serie']
-    ordering_fields = ['nombre', 'cantidad', 'fecha_registro']
-    permission_classes = [permissions.IsAuthenticatedOrReadOnly]
+
 

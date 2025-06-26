@@ -17,14 +17,12 @@ class ItemInventario(models.Model):
     categorias = models.ManyToManyField('Categoria', blank=True, related_name='items')
     etiquetas = models.ManyToManyField('Etiqueta', blank=True, related_name='items')
 
-    
     def __str__(self):
         return f"{self.nombre} ({self.numero_serie or 'N/A'})"
 
     class Meta:
         verbose_name = "Item de Inventario"
-        verbose_name_plural = "Items de Inventario"
-        
+        verbose_name_plural = "Items de Inventario"    
         
 class MovimientoInventario(models.Model):
     TIPO_MOVIMIENTO_CHOICES = [
