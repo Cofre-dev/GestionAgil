@@ -2,7 +2,6 @@ from django.db import models
 
 # Create your models here.
 # tasks/models.py
-from django.db import models
 
 class ItemInventario(models.Model):
     nombre = models.CharField(max_length=200)
@@ -39,7 +38,7 @@ class MovimientoInventario(models.Model):
     fecha_movimiento = models.DateTimeField(auto_now_add=True)
     razon = models.TextField(blank=True, null=True)
     # Puedes añadir un usuario que realizó el movimiento si implementas autenticación de usuarios
-    # usuario = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=True)
+    #usuario = models.ForeignKey(user, on_delete=models.SET_NULL, null=True, blank=True)
 
     def __str__(self):
         return f"{self.tipo_movimiento.capitalize()} de {self.cantidad_cambio} de {self.item.nombre} el {self.fecha_movimiento.strftime('%Y-%m-%d %H:%M')}"

@@ -3,7 +3,7 @@
 // Envuelve todo tu código en esta función para asegurar que el DOM esté cargado
 document.addEventListener('DOMContentLoaded', () => {
 
-    const API_BASE_URL = 'http://127.0.0.1:8000/api';
+    const API_BASE_URL = window.API_BASE_URL || 'http://127.0.0.1:8000/api';
     const TOKEN_AUTH_URL = 'http://127.0.0.1:8000/api-token-auth/';
 
     // Asegúrate de que todos estos IDs existan en tu HTML
@@ -14,11 +14,27 @@ document.addEventListener('DOMContentLoaded', () => {
     const authStatusDiv = document.getElementById('auth-status');
     const addItemForm = document.getElementById('add-item-form');
     const addItemStatusDiv = document.getElementById('add-item-status');
+    const movementForm = document.getElementById('movement-form'); 
+    const movementStatusDiv = document.getElementById('movement-status');
+    const itemSelectDropdown = document.getElementById('movement-item');
 
     let authToken = localStorage.getItem('authToken');
     let isAuthenticated = !!authToken;
 
     // --- Funciones de Autenticación ---
+
+    function populateItemsDropdown(items) {
+        if (!itemSelectDropdown) return;
+
+        itemSelectDropdown.innerHTML = '<option value="" disabled selected>-- Elige un ítem --</option>'; // Opción por defecto
+        
+        items.forEach(item => {
+            const option = document.createElement('option');
+            option.value = item.id;
+            option.textContent = `${item.nombre} (Stock: ${item.cantidad})`;
+            itemSelectDropdown.appendChild(option);
+        });
+    }
 
     function updateAuthStatus() {
         // VERIFICACIONES ADICIONALES PARA DEBUGGING:
@@ -50,7 +66,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 },
                 body: JSON.stringify({ username, password }),
             });
-
+            
             if (!response.ok) {
                 const errorData = await response.json();
                 throw new Error(errorData.non_field_errors ? errorData.non_field_errors[0] : 'Credenciales inválidas.'); // Mensaje más específico
@@ -204,13 +220,89 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
+    async function fetchItems() {
+        // ...
+        try {
+            // ...
+            const items = await response.json();
+            renderItems(items);
+            populateItemsDropdown(items); // <-- AÑADIR ESTA LÍNEA
+        } catch (error) {
+            // ...
+        }
+    }
+
+    async function registerMovement(event) {
+        event.preventDefault();
+        if (movementStatusDiv) movementStatusDiv.innerHTML = '';
+
+        if (!isAuthenticated) {
+            if (movementStatusDiv) {
+                movementStatusDiv.className = 'message error-message';
+                movementStatusDiv.textContent = 'Debes iniciar sesión para registrar salidas.';
+            }
+            return;
+        }
+        
+        const movementData = {
+            item: document.getElementById('movement-item').value,
+            tipo_movimiento: 'salida', // <-- CAMBIO CLAVE: Valor fijado a 'salida'
+            cantidad_cambio: parseInt(document.getElementById('movement-quantity').value),
+            razon: document.getElementById('movement-reason').value
+        };
+
+        if (!movementData.item || isNaN(movementData.cantidad_cambio) || movementData.cantidad_cambio <= 0) {
+            if (movementStatusDiv) {
+                movementStatusDiv.className = 'message error-message';
+                movementStatusDiv.textContent = 'Por favor, selecciona un ítem y una cantidad válida.';
+            }
+            return;
+        }
+
+        try {
+            const response = await fetch(`${API_BASE_URL}/movements/`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Token ${authToken}`,
+                },
+                body: JSON.stringify(movementData),
+            });
+
+            if (!response.ok) {
+                const errorData = await response.json();
+                // Verificamos si el error viene del backend por stock insuficiente
+                if (errorData.error) {
+                    throw new Error(errorData.error);
+                }
+                throw new Error(`Error general: ${JSON.stringify(errorData)}`);
+            }
+
+            if (movementStatusDiv) {
+                movementStatusDiv.className = 'message stock-ok';
+                movementStatusDiv.textContent = `¡Salida registrada exitosamente!`;
+            }
+            if (movementForm) movementForm.reset();
+            fetchItems(); // Actualizamos la lista para ver el nuevo stock.
+
+        } catch (error) {
+            console.error('Error registering movement:', error);
+            if (movementStatusDiv) {
+                movementStatusDiv.className = 'message error-message';
+                movementStatusDiv.textContent = `${error.message}`;
+            }
+        }
+    }
 
     // --- Event Listeners y Carga Inicial ---
     // Asegurarse de que los elementos existan antes de añadir listeners
+   // --- Event Listeners y Carga Inicial ---
     if (loginForm) loginForm.addEventListener('submit', login);
     if (addItemForm) addItemForm.addEventListener('submit', addItem);
+    if (movementForm) movementForm.addEventListener('submit', registerMovement); // <-- AÑADIR ESTA LÍNEA
 
     updateAuthStatus();
     fetchItems();
+});
 
-}); // Fin de DOMContentLoaded
+// Fin de DOMContentLoaded
