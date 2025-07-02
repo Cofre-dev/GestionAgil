@@ -8,7 +8,6 @@ from .views import *
 # router.register(r'items', LoteListCreateView)
 
 urlpatterns = [
-    
      # URLs para Items de Inventario
     path('items/', views.ItemInventarioListCreateView.as_view(), name='iteminventario-list-create'),
     path('items/<int:pk>/', views.ItemInventarioRetrieveUpdateDestroyView.as_view(), name='iteminventario-detail'),

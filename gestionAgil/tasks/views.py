@@ -1,6 +1,7 @@
 from django.shortcuts import render
 # tasks/views.py
-from rest_framework import generics, filters, permissions
+from rest_framework import generics, filters, permissions, status
+from rest_framework.response import Response
 from django_filters.rest_framework import DjangoFilterBackend
                                                                                 
 from .models import *
@@ -8,6 +9,12 @@ from .serializers import *
 from .filters import ItemInventarioFilter 
 from .permissions import *
 
+def vista_login(request):
+    return render(request, 'index.html')
+
+def vista_inventario(request):
+    return render(request, 'inventario.html')
+    
 class ItemInventarioListCreateView(generics.ListCreateAPIView):
     queryset = ItemInventario.objects.all()
     serializer_class = ItemInventarioSerializer
@@ -24,14 +31,12 @@ class ItemInventarioRetrieveUpdateDestroyView(generics.RetrieveUpdateDestroyAPIV
     serializer_class = ItemInventarioSerializer
     lookup_field = 'pk'
     permission_classes = [IsAdminUser | IsGestorInventario]
-    
-# Nuevas vistas para Movimientos de Inventario
+
 class MovimientoInventarioListCreateView(generics.ListCreateAPIView):
     queryset = MovimientoInventario.objects.all()
     serializer_class = MovimientoInventarioSerializer
     permission_classes = [IsAdminUser | IsGestorInventario]
 
-    # Opcional: para actualizar la cantidad del ItemInventario cuando se crea un movimiento
     def perform_create(self, serializer):
         movimiento = serializer.save()
         item = movimiento.item
@@ -40,6 +45,30 @@ class MovimientoInventarioListCreateView(generics.ListCreateAPIView):
         elif movimiento.tipo_movimiento == 'salida':
             item.cantidad -= movimiento.cantidad_cambio
         item.save()
+        
+    def create(self, request, *args, **kwargs):
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        
+        item = serializer.validated_data['item']
+        cantidad_cambio = serializer.validated_data['cantidad_cambio']
+        tipo_movimiento = serializer.validated_data['tipo_movimiento']
+        
+        if tipo_movimiento == 'salida' and item.cantidad < cantidad_cambio:
+            return Response(
+                {"error": f"Stock insuficiente para '{item.nombre}'. Stock actual: {item.cantidad}."},
+                status=status.HTTP_400_BAD_REQUEST
+            )
+        
+        movimiento = serializer.save()
+        if tipo_movimiento == 'entrada':
+            item.cantidad += cantidad_cambio
+        elif tipo_movimiento == 'salida':
+            item.cantidad -= cantidad_cambio
+        item.save()
+        
+        headers = self.get_success_headers(serializer.data)
+        return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
 
 class MovimientoInventarioRetrieveUpdateDestroyView(generics.RetrieveUpdateDestroyAPIView):
     queryset = MovimientoInventario.objects.all()
