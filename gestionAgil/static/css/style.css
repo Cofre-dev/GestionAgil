@@ -6,6 +6,129 @@ body {
     background-color: #f4f4f4;
     color: #333;
 }
+/* Esta es la regla clave que oculta el modal por defecto */
+.modal-hidden {
+    display: none !important;
+}
+
+#app-modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.6);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+}
+
+/* El cuadro de diálogo principal */
+.modal-dialog {
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+    width: 90%;
+    max-width: 450px;
+}
+
+/* ... (El resto de los estilos del modal que te di anteriormente) ... */
+.modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid #eee;
+    padding-bottom: 10px;
+    margin-bottom: 15px;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(-20px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+/* Cabecera, cuerpo y pie del modal */
+.modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid #eee;
+    padding-bottom: 10px;
+    margin-bottom: 15px;
+}
+
+.modal-header h3 {
+    margin: 0;
+}
+
+.modal-body {
+    margin-bottom: 20px;
+}
+
+.modal-footer {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+}
+
+/* Botones */
+.modal-btn {
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-weight: bold;
+}
+
+.modal-btn-primary {
+    background-color: #007bff;
+    color: white;
+}
+.modal-btn-primary:hover {
+    background-color: #0056b3;
+}
+
+.modal-btn-secondary {
+    background-color: #6c757d;
+    color: white;
+}
+.modal-btn-secondary:hover {
+    background-color: #5a6268;
+}
+
+.modal-close-btn {
+    background: none;
+    border: none;
+    font-size: 24px;
+    cursor: pointer;
+    color: #888;
+}
+.logout-button{
+    border-radius: 20px;
+}
+.delete-button {
+    background-color: #dc3545; /* Rojo */
+    color: white;
+    border: none;
+    padding: 5px 10px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 12px;
+    margin-left: auto; /* Lo empuja a la derecha */
+}
+
+.delete-button:hover {
+    background-color: #c82333; /* Rojo más oscuro */
+}
+
+.card-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 10px;
+}
 .container {
     max-width: 1200px;
     margin: 0 auto;

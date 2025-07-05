@@ -17,14 +17,10 @@
         <section class="item-list-section">
             <h2>Lista de Ítems</h2>
             <div id="items-container" class="item-grid">
-                <p class="message loading-message">Cargando ítems...</p>
-            </div>
+                </div>
         </section>
 
-        <section class="form-section">
-            <h2>Añadir Nuevo Ítem</h2>
-            <form id="add-item-form">
-            <section class="form-section">
+         <section class="form-section">
             <h2>Añadir Nuevo Ítem</h2>
             <form id="add-item-form">
                 <label for="item-nombre">Nombre:</label>
@@ -46,52 +42,74 @@
                 <input type="number" id="item-umbral_minimo" name="umbral_minimo" placeholder="Cantidad mínima para alerta" required min="0">
 
                 <button type="submit">Añadir Ítem</button>
-                <div id="add-item-status" class="message"></div>
+                <div class="message" id="add-item-status"></div>
             </form>
-        </section>
+        </section> 
+
+        {% comment %} <section class="form-section">
+            <h2>Registrar Movimiento (Entrada/Salida)</h2>
+            <form id="movement-form">
+                <label for="movement-item">Seleccionar Ítem:</label>
+
+                <select id="movement-item" name="item" required>
+                    <option value="" disabled selected>Cargando ítems...</option>
+                </select>
+
+                <label for="movement-type">Tipo de Movimiento:</label>
+                <select id="movement-type" name="tipo_movimiento" required>
+                    <option value="entrada">Entrada (Añadir a stock existente)</option>
+                    <option value="salida">Salida (Retirar de stock)</option>
+                </select>
+
+                <label for="movement-quantity">Cantidad a Mover:</label>
+                <input type="number" id="movement-quantity" name="cantidad_cambio" placeholder="Cantidad a mover" required min="1">
+
+                <label for="movement-reason">Razón (Opcional):</label>
+                <textarea id="movement-reason" name="razon" placeholder="Ej: Recepción de proveedor, Venta"></textarea>
+
+                <button type="submit">Registrar Movimiento</button>
+                <div class="message" id="movement-status"></div>
             </form>
-        </section>
+        </section> {% endcomment %}
 
         <section class="form-section">
             <h2>Registrar Salida de Ítem</h2>
             <form id="movement-form">
-                    <section class="form-section">
-                        <h2>Registrar Salida de Ítem</h2>
-                        <form id="movement-form">
-                            <label for="movement-item">Seleccionar Ítem:</label>
-                            <select id="movement-item" required>
-                                <option value="">Cargando ítems...</option>
-                            </select>
+                <label for="movement-item">Seleccionar Ítem:</label>
+                <select id="movement-item" name="item" required>
+                    <option value="" disabled selected>Cargando ítems...</option>
+                </select>
 
-                            <label for="movement-quantity">Cantidad a Retirar:</label>
-                            <input type="number" id="movement-quantity" placeholder="Cantidad a retirar" required min="1">
+                <label for="movement-quantity">Cantidad a Retirar:</label>
+                <input type="number" id="movement-quantity" name="cantidad_cambio" placeholder="Cantidad a retirar" required min="1">
 
-                            <label for="movement-reason">Razón de la Salida (Opcional):</label>
-                            <textarea id="movement-reason" placeholder="Ej: Venta, Uso en proyecto, Despacho"></textarea>
+                <label for="movement-reason">Razón de la Salida (Opcional):</label>
+                <textarea id="movement-reason" name="razon" placeholder="Ej: Venta, Uso en proyecto, Despacho"></textarea>
 
-                            <button type="submit">Registrar Salida</button>
-                            <div id="movement-status" class="message"></div>
-                        </form>
-                    </section>
-                </form>
+                <button id="registro-salida" type="submit">Registrar Salida</button>
+                <div class="message" id="movement-status"></div>
+            </form>
         </section>
-
-        {% comment %} <section class="item-list-section">
-            <h2>Lista de Ítems</h2>
-            <div id="items-container" class="item-grid">
-                <p class="message loading-message">Cargando ítems...</p>
-            </div>
-        </section> {% endcomment %}
-
-        {% comment %} <div class="container">
-            <header class="main-header">
-                <h1>Administración de Inventario</h1>
-                <div id="auth-status"></div> 
-            </header>
-        </div> {% endcomment %}
 
     </div>
 
+    <div id="app-modal" class="modal-hidden">
+        <div class="modal-dialog">
+            <div class="modal-header">
+                <h3 id="modal-title">Título del Modal</h3>
+                <button id="modal-close-btn" class="modal-close-btn">&times;</button>
+            </div>
+            <div class="modal-body">
+                <p id="modal-message">Mensaje del modal.</p>
+            </div>
+            <div class="modal-footer">
+                <button id="modal-cancel-btn" class="modal-btn modal-btn-secondary">Cancelar</button>
+                <button id="modal-confirm-btn" class="modal-btn modal-btn-primary">Confirmar</button>
+            </div>
+        </div>
+    </div>
+
+    {# Cargar el script JS al final del body para asegurar que el DOM esté cargado #}
     <script src="{% static 'js/inventario.js' %}"></script>
 </body>
 </html>
