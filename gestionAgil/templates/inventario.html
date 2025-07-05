@@ -49,31 +49,12 @@
             </form>
         </section> 
 
-        <!-- Formulario para registrar ingreso de ítems -->
-        {% comment %} <section class="form-section">
-            <h2>Registrar Ingreso de Ítem</h2>
-            <form id="entry-form">
-                <label for="entry-item">Seleccionar Ítem:</label>
-                <select id="entry-item" name="item" required>
-                    <option value="" disabled selected>Cargando ítems...</option>
-                </select>
-
-                <label for="entry-quantity">Cantidad a Ingresar:</label>
-                <input type="number" id="entry-quantity" name="cantidad_cambio" placeholder="Cantidad a Ingresar" required min="1">
-
-                <label for="entry-reason">Razón del Ingreso (Opcional):</label>
-                <textarea id="entry-reason" name="razon" placeholder="Ej: Reposición, Compra, Donación"></textarea>
-
-                <button type="submit" id="registro-entrada">Registrar Entrada</button>
-                <div class="message" id="entry-status"></div>
-            </form>
-        </section> {% endcomment %}
-
         <!-- Formulario para registrar salida de ítems -->
         <section class="form-section">
             <h2>Registrar Salida de Ítem</h2>
             <form id="exit-form">
                 <label for="exit-item">Seleccionar Ítem:</label>
+                
                 <select id="exit-item" name="item" required>
                     <option value="" disabled selected>Cargando ítems...</option>
                 </select>
